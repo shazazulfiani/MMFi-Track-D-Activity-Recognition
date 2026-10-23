@@ -1,71 +1,85 @@
+
 # Proyek MM-Fi Track D: Pengenalan Aktivitas Manusia Menggunakan Wi-Fi CSI
 
 ## 1. Tentang Proyek
 
-Proyek ini membahas pengenalan aktivitas manusia menggunakan data Wi-Fi Channel State Information (CSI) dari dataset MM-Fi. Pada proyek ini, saya membandingkan dua model, yaitu 2D-CNN sebagai model dasar dan CNN-DANN sebagai model yang menggunakan metode domain adaptation.
+Proyek ini dibuat untuk mengenali aktivitas manusia menggunakan data Wi-Fi Channel State Information (CSI) dari dataset MM-Fi.
 
-Tujuan proyek ini adalah mengetahui bagaimana kedua model mengenali aktivitas manusia ketika data yang digunakan berasal dari lingkungan yang berbeda.
+Pada proyek ini, saya membandingkan dua model, yaitu 2D-CNN sebagai model dasar dan CNN-DANN yang menggunakan pendekatan domain adaptation. Tujuannya adalah melihat kemampuan kedua model dalam mengenali aktivitas manusia pada lingkungan yang berbeda.
 
 ## 2. Metode yang Digunakan
 
-Dalam proyek ini, saya menggunakan dua model:
+Proyek ini menggunakan beberapa tahapan:
 
-- **2D-CNN:** model dasar untuk mengenali aktivitas manusia berdasarkan fitur Wi-Fi CSI.
-- **CNN-DANN:** model yang menggunakan domain adaptation untuk membantu model menyesuaikan diri dengan perbedaan lingkungan.
+1. **Preprocessing data:** membaca data CSI, menangani nilai yang tidak valid, melakukan sanitasi fase, dan mengurangi noise.
+2. **Normalisasi:** menyesuaikan skala fitur agar lebih sesuai untuk proses pelatihan model.
+3. **Pembagian data:** menggunakan data source untuk pelatihan dan validasi, data target adaptation untuk adaptasi domain, serta data target test untuk pengujian akhir.
+4. **Pelatihan model:** melatih 2D-CNN dan CNN-DANN menggunakan PyTorch.
+5. **Evaluasi:** membandingkan hasil model menggunakan accuracy, macro-F1, weighted-F1, classification report, dan confusion matrix.
 
-Data yang digunakan berasal dari dua komponen Wi-Fi CSI, yaitu amplitudo dan fase. Data tersebut melalui proses preprocessing dan normalisasi sebelum digunakan untuk melatih model.
+## 3. Struktur Repository
 
-## 3. Dataset dan Pembagian Data
+- `preprocess.py`: script preprocessing data CSI.
+- `data_utils.py`: fungsi untuk memuat, memvalidasi, dan menyiapkan data.
+- `models.py`: arsitektur model 2D-CNN dan CNN-DANN.
+- `train.py`: script pelatihan model.
+- `evaluate.py`: script evaluasi model.
+- `Track_D_MMFi_Final.ipynb`: notebook eksperimen di Google Colab.
+- `requirements.txt`: daftar pustaka Python yang diperlukan.
+- `results/`: hasil evaluasi, prediksi, riwayat pelatihan, dan visualisasi.
 
-Dataset MM-Fi yang digunakan terdiri dari empat lingkungan, yaitu E01, E02, E03, dan E04. Lingkungan E01 sampai E03 digunakan sebagai sumber data, sedangkan E04 digunakan sebagai lingkungan target.
+## 4. Dataset dan Persiapan
 
-Data dibagi menjadi empat bagian:
+Proyek ini menggunakan dataset MM-Fi, khususnya data Wi-Fi CSI.
 
-| Pembagian Data | Jumlah Sampel | Kegunaan |
-|---|---:|---|
-| Source Train | 1.940 | Melatih model |
-| Source Validation | 486 | Memilih model terbaik |
-| Target Adaptation | 486 | Penyesuaian model menggunakan data target tanpa label aktivitas saat pelatihan |
-| Target Test | 324 | Menguji hasil akhir model |
+Dataset mentah tidak disertakan dalam repository karena ukuran filenya besar. File dataset, anotasi, cache fitur, metadata, dan parameter normalisasi perlu disiapkan secara terpisah di Google Drive.
 
-Terdapat 27 kelas aktivitas yang digunakan dalam penelitian ini. Dari seluruh data yang diproses, terdapat 3.236 sampel valid yang digunakan dalam eksperimen.
+Sebelum menjalankan kode, sesuaikan lokasi file dengan path yang digunakan dalam script.
 
-## 4. Hasil Pengujian
+## 5. Cara Menjalankan Proyek
 
-Pengujian akhir dilakukan menggunakan data target test dari lingkungan E04. Hasil kedua model adalah sebagai berikut.
+Proyek dapat dijalankan menggunakan Google Colab dengan GPU yang mendukung PyTorch.
 
-| Metrik | 2D-CNN | CNN-DANN |
-|---|---:|---:|
-| Accuracy | 5,56% | 6,79% |
-| Macro-F1 | 2,85% | 4,11% |
-| Weighted-F1 | 2,85% | 4,11% |
+Langkah-langkahnya:
 
-Berdasarkan hasil tersebut, CNN-DANN memperoleh nilai yang lebih tinggi dibandingkan 2D-CNN pada ketiga metrik pengujian. Namun, nilai yang diperoleh kedua model masih rendah. Artinya, model masih mengalami kesulitan dalam mengenali aktivitas ketika diuji pada lingkungan yang berbeda.
+1. Buka notebook `Track_D_MMFi_Final.ipynb` di Google Colab.
+2. Hubungkan Google Drive menggunakan `drive.mount()`.
+3. Pastikan dataset atau file pendukung yang diperlukan sudah tersedia.
+4. Periksa path dataset, cache fitur, metadata, dan parameter normalisasi.
+5. Pasang pustaka yang diperlukan berdasarkan `requirements.txt`.
+6. Jalankan tahap preprocessing jika memulai dari dataset mentah.
+7. Jalankan validasi data dan persiapan DataLoader.
+8. Jalankan training 2D-CNN dan CNN-DANN.
+9. Jalankan evaluasi pada target test dan simpan hasilnya ke folder `results`.
 
-## 5. Isi Repository
+Script Python juga dipisahkan ke dalam beberapa file agar lebih mudah dibaca dan dikembangkan. Sebelum menjalankan script secara terpisah, pastikan dependensi, path input, dan lokasi penyimpanan sudah sesuai.
 
-Repository ini digunakan untuk menyimpan kode, dokumentasi, dan hasil dari proyek MM-Fi Track D.
+## 6. Hasil Eksperimen
 
-- `Track_D_MMFi_Final.ipynb`: notebook Google Colab yang berisi proses preprocessing, pembuatan model, pelatihan, dan evaluasi.
-- `README.md`: dokumentasi singkat mengenai proyek, metode, pembagian data, dan hasil pengujian.
-- `results/`: tempat menyimpan tabel hasil pengujian, prediksi, dan visualisasi.
-- `checkpoints/`: tempat menyimpan model yang telah dilatih.
-- `artifacts/`: tempat menyimpan parameter normalisasi yang digunakan dalam eksperimen.
+Berdasarkan pengujian target test terakhir yang tercatat, diperoleh hasil berikut:
 
-Beberapa file berukuran besar, seperti dataset mentah dan cache fitur, tetap disimpan di Google Drive agar repository tidak terlalu besar.
+| Model | Accuracy | Macro-F1 | Weighted-F1 |
+|---|---:|---:|---:|
+| 2D-CNN | 5,56% | 2,85% | 2,85% |
+| CNN-DANN | 6,79% | 4,11% | 4,11% |
 
-## 6. Kesimpulan
+Pada pengujian tersebut, CNN-DANN memperoleh hasil lebih baik daripada 2D-CNN pada ketiga metrik. Namun, nilai evaluasinya masih rendah sehingga model perlu dikembangkan lebih lanjut.
 
-Berdasarkan hasil eksperimen, CNN-DANN menunjukkan hasil yang lebih baik dibandingkan 2D-CNN pada pengujian di lingkungan E04. Meskipun demikian, performa kedua model masih rendah sehingga diperlukan pengembangan lebih lanjut.
-
-Proyek ini menjadi langkah awal untuk mempelajari penerapan deep learning dan domain adaptation dalam pengenalan aktivitas manusia menggunakan Wi-Fi CSI.
-
-## 7. Tools yang Digunakan
+## 7. Perangkat dan Pustaka
 
 - Python
-- Google Colab
 - PyTorch
-- NumPy dan Pandas
-- Scikit-learn
+- NumPy
+- Pandas
+- SciPy
+- scikit-learn
 - Matplotlib
-- Dataset MM-Fi
+- Google Colab
+
+Versi pustaka yang digunakan dapat dilihat pada `requirements.txt`.
+
+## 8. Kesimpulan
+
+Proyek ini membandingkan model 2D-CNN dan CNN-DANN untuk pengenalan aktivitas manusia menggunakan Wi-Fi CSI. Hasil awal menunjukkan bahwa CNN-DANN lebih baik pada target test, tetapi performa kedua model masih perlu ditingkatkan.
+
+Repository ini disusun untuk mendokumentasikan kode preprocessing, arsitektur model, pelatihan, evaluasi, dan hasil eksperimen agar proses penelitian lebih mudah dipahami dan dikembangkan.
