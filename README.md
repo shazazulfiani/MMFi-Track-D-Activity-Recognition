@@ -83,3 +83,32 @@ Versi pustaka yang digunakan dapat dilihat pada `requirements.txt`.
 Proyek ini membandingkan model 2D-CNN dan CNN-DANN untuk pengenalan aktivitas manusia menggunakan Wi-Fi CSI. Hasil awal menunjukkan bahwa CNN-DANN lebih baik pada target test, tetapi performa kedua model masih perlu ditingkatkan.
 
 Repository ini disusun untuk mendokumentasikan kode preprocessing, arsitektur model, pelatihan, evaluasi, dan hasil eksperimen agar proses penelitian lebih mudah dipahami dan dikembangkan.
+
+## 9. Contoh Menjalankan Proyek di Google Colab
+
+Pastikan Google Drive sudah terhubung dan file cache fitur, metadata, serta normalisasi sudah tersedia sesuai lokasi yang digunakan pada script.
+
+### Memasang pustaka
+
+```python
+!pip install -r requirements.txt
+```
+
+### Melatih model
+
+```python
+!python train.py
+```
+
+Perintah ini melatih model 2D-CNN dan CNN-DANN serta menyimpan checkpoint dan riwayat pelatihan.
+
+### Mengevaluasi model
+
+```python
+!python evaluate.py
+```
+
+Evaluasi menggunakan checkpoint yang sudah tersedia dan menyimpan hasil pengujian ke folder `results`.
+
+**Catatan:** Jalankan perintah dari folder repository yang berisi file Python. Pastikan Google Drive sudah di-mount dan file data serta checkpoint tersedia pada lokasi yang sesuai.
+
