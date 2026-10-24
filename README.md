@@ -74,7 +74,6 @@ Keterangan:
 - `checkpoints/`: menyimpan checkpoint model yang telah dilatih.
 - `artifacts/`: menyimpan parameter normalisasi yang digunakan selama eksperimen.
 
-*Catatan: sesuaikan struktur di atas dengan file yang benar-benar tersedia di repository. Tidak semua file harus disertakan jika fungsinya hanya dijalankan melalui notebook.*
 
 ## 4. Dataset dan Persiapan Data
 
